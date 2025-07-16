@@ -22,7 +22,7 @@ func visit(path string, di fs.DirEntry, err error) error {
 	r, _ := regexp.Compile(FilenameFormat + ".*." + FileExtension)
 
 	if r.MatchString(path) {
-		klog.Info("Visited: %s\n", filepath.Base(path))
+		klog.V(4).Info("Visited: %s\n", filepath.Base(path))
 
 		decomposed_f := strings.Split(path, "/")
 		dynamic := decomposed_f[len(decomposed_f)-2]
@@ -55,7 +55,7 @@ func clienDefinitionMetrics(labels map[string]string) {
 		},
 		func() float64 { return float64(1) },
 	)); err == nil {
-		klog.Info("GaugeFunc 'definition_data_version' registered with labels: %s \n", labels)
+		klog.V(4).Info("GaugeFunc 'definition_data_version' registered with labels: %s \n", labels)
 	}
 }
 
@@ -71,6 +71,7 @@ func recordMetrics(conf *ConfigOpts) {
 func main() {
 
 	klog.InitFlags(nil)
+	defer klog.Flush()
 	conf := &ConfigOpts{}
 	parser := flags.NewParser(conf, flags.Default)
 	if _, err := parser.Parse(); err != nil {
