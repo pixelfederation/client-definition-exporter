@@ -1,14 +1,13 @@
-# This is an example .goreleaser.yml file with some sensible defaults.
-# Make sure to check the documentation at https://goreleaser.com
-dist: build
+version: 2
+
 before:
   hooks:
-    # You may remove this if you don't use go modules.
     - go mod tidy
-    # you may remove this if you don't need go generate
     - go generate ./...
+
 builds:
-  - env:
+  - id: myapp
+    env:
       - CGO_ENABLED=0
     goos:
       - linux
@@ -18,21 +17,22 @@ builds:
       - arm64
 
 archives:
-  - replacements:
-      darwin: darwin
-      linux: linux
-      windows: windows
-      386: i386
-      amd64: amd64
+  - id: default
+    ids:
+      - myapp
+    format: tar.gz
+
 checksum:
-  name_template: 'checksums.txt'
+  name_template: "checksums.txt"
   algorithm: sha256
+
 snapshot:
   name_template: "{{ incpatch .Version }}-next"
+
 changelog:
   sort: asc
   filters:
     exclude:
-      - '^docs:'
-      - '^test:'
-      - '^vendor:'
+      - "^docs:"
+      - "^test:"
+      - "^vendor:"

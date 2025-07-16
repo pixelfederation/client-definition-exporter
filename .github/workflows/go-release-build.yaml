@@ -25,9 +25,10 @@ jobs:
           go-version: 1.18.2
 
       - name: Run GoReleaser
-        uses: goreleaser/goreleaser-action@v3
+        uses: goreleaser/goreleaser-action@v6
         with:
-          version: latest
-          args: release --rm-dist --debug
+          distribution: goreleaser # or 'goreleaser-pro'
+          version: "~> v2" # or 'latest', 'nightly', semver
+          args: release --clean
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
